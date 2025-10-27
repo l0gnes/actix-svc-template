@@ -1,5 +1,4 @@
 use actix_web::{App, HttpServer};
-use tracing_actix_web::TracingLogger;
 
 #[cfg(feature = "docs")]
 pub mod docs;
@@ -10,14 +9,14 @@ pub mod tracing;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     #[cfg(feature = "env")]
-    dotenvy::dotenv()?;
+    let _ = dotenvy::dotenv();
 
     #[cfg(feature = "tracing")]
     tracing::setup_tracing().await?;
 
     // Setup and run the web server
     HttpServer::new(|| {
-        let app = App::new().wrap(TracingLogger::default());
+        let app = App::new().wrap(tracing::TracingLogger::default());
 
         // Spins up an swagger-ui instance at */swagger-ui/index.html
         #[cfg(feature = "docs")]

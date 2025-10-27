@@ -1,5 +1,6 @@
 use opentelemetry::global;
 use opentelemetry_otlp::WithExportConfig;
+pub use tracing_actix_web::TracingLogger;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
 pub async fn setup_tracing() -> anyhow::Result<()> {
