@@ -6,6 +6,8 @@ pub mod docs;
 #[cfg(feature = "tracing")]
 pub mod tracing;
 
+pub mod routes;
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     #[cfg(feature = "env")]
@@ -24,6 +26,8 @@ async fn main() -> anyhow::Result<()> {
             "/api-docs/openapi.json",
             <docs::ApiDoc as utoipa::OpenApi>::openapi(),
         ));
+
+        let app = app.configure(routes::configure);
 
         return app;
     })

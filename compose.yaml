@@ -7,6 +7,7 @@ services:
     ports:
       - "8080:8080"
     networks:
+      - proxy-nw
       - database-nw
       - tracing-nw
 
@@ -43,11 +44,17 @@ services:
       - "433:433"
       - "433:433/udp"
 
+    networks:
+      - proxy-nw
+
 networks:
   database-nw:
     driver: bridge
 
   tracing-nw:
+    driver: bridge
+
+  proxy-nw:
     driver: bridge
 
 volumes:
