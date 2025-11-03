@@ -10,18 +10,17 @@ dotenvy = { version = "0.15.7", optional = true}
 opentelemetry = { version="0.31.0", optional=true }
 opentelemetry-otlp = { version="0.31.0", optional=true }
 opentelemetry_sdk = { version="0.31.0", optional=true }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
 tokio = { version = "^1.47.0", features = ["full"] }
 tokio-macros = { version = "0.2.0-alpha.6" }
 tracing = { version="0.1.41", optional=true }
 tracing-actix-web = { version="0.7.19", optional=true }
 tracing-opentelemetry = { version="0.32.0", optional=true }
 tracing-subscriber = { version = "0.3.20", features = ["env-filter", "fmt"], optional=true }
-utoipa = { version = "5.4.0", features = ["actix_extras", "chrono"], optional = true }
-utoipa-swagger-ui = { version = "9.0.2", features = ["actix-web", "vendored"], optional=true }
 
 [features]
-default = ["docs", "tracing", "env"]
-docs = ["dep:utoipa", "dep:utoipa-swagger-ui"]
+default = ["tracing", "env"]
 tracing = [
   "dep:opentelemetry", 
   "dep:opentelemetry_sdk", 
