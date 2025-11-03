@@ -32,3 +32,4 @@ tracing = [
   "dep:tracing-opentelemetry"
 ]
 env = ["dep:dotenvy"]
+docs = []
