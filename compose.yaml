@@ -1,3 +1,6 @@
+x-database-information: &db-env
+  POSTGRES_URL: postgresql://glorp:example_password@db:5432
+
 services:
 
   server:
@@ -16,6 +19,9 @@ services:
     depends_on:
       - db
 
+    environment:
+      <<: [*db-env]
+
   db:
     image: postgres:latest
 
@@ -25,7 +31,8 @@ services:
       - 5432:5432
 
     environment:
-     POSTGRES_PASSWORD: example_password
+      POSTGRES_USER: glorp
+      POSTGRES_PASSWORD: example_password
 
     networks:
       - database-nw
