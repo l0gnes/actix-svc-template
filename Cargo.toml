@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+actix-governor = "0.10.0"
 actix-web = "4.11.0"
 anyhow = "1.0.100"
 dotenvy = { version = "0.15.7", optional = true}

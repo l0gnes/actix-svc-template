@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
 use crate::{ServiceStore, db::models::Product};
+use actix_governor::{Governor, GovernorConfigBuilder};
 use actix_web::{
     get, post,
     web::{self, Data, Json, Path, ServiceConfig},
@@ -9,8 +10,16 @@ use serde::{Deserialize, Serialize};
 use welds::exts::VecStateExt;
 
 pub fn setup_product_endpoints(cfg: &mut ServiceConfig) {
+    // actix-governor handles ratelimiting using governor
+    let governor_config = GovernorConfigBuilder::default()
+        .requests_per_minute(10)
+        .burst_size(5)
+        .finish()
+        .unwrap();
+
     cfg.service(
         web::scope("/products")
+            .wrap(Governor::new(&governor_config))
             .service(post_new_product)
             .service(get_all_products)
             .service(get_product_by_id),
@@ -54,7 +63,7 @@ pub async fn get_all_products(state: Data<ServiceStore>) -> Json<Vec<Product>> {
 pub async fn get_product_by_id(
     state: Data<ServiceStore>,
     path: Path<(i32,)>,
-) -> Option<Json<Product>> {
+) -> Json<Option<Product>> {
     let req_id = path.into_inner().0.clone();
 
     let prod = Product::where_col(|p| p.id.equal(req_id))
@@ -67,8 +76,8 @@ pub async fn get_product_by_id(
     if let Some(f) = first {
         let inner = f.deref().clone();
 
-        return Some(Json(inner));
+        return Json(Some(inner));
     } else {
-        return None;
+        return Json(None);
     }
 }
